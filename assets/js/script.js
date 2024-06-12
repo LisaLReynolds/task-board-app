@@ -1,3 +1,8 @@
+// modal
+const modal = document.querySelector("#theModal");
+const btn = document.querySelector(".btn");
+const span = document.querySelector(".close")[0];
+
 // Retrieve tasks and nextId from localStorage
 function readTasksFromStorage() {
   let taskList = JSON.parse(localStorage.getItem("tasks"));
@@ -69,11 +74,6 @@ function handleDrop(event, ui) {}
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 $(document).ready(function () {});
-
-// modal
-const modal = document.querySelector("#theModal");
-const btn = document.querySelector(".btn");
-const span = document.querySelector(".close")[0];
 
 // When the user clicks the button, open the modal
 btn.onclick = function () {
