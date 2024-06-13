@@ -1,10 +1,10 @@
 //references to important DOM elements
-const timeDisplayEl = $('#time-display')
-const taskDisplayEl = $('#task-display');
-const taskFormEl = $('#taskForm');
-const taskTitleInputEl = $('#task-title');
-const taskDescriptionInputEl = $('#task-description');
-const taskDateInputEl = $('#taskDueDate')
+const timeDisplayEl = $("#time-display");
+const taskDisplayEl = $("#task-display");
+const taskFormEl = $("#taskForm");
+const taskTitleInputEl = $("#task-title");
+const taskDescriptionInputEl = $("#task-description");
+const taskDateInputEl = $("#taskDueDate");
 
 // modal
 const modal = document.querySelector("#theModal");
@@ -14,7 +14,7 @@ const span = document.querySelector(".close")[0];
 // Retrieve tasks and nextId from localStorage
 function readTasksFromStorage() {
   let taskList = JSON.parse(localStorage.getItem("tasks"));
-let nextId = JSON.parse(localStorage.getItem("nextId"));
+  let nextId = JSON.parse(localStorage.getItem("nextId"));
   if (!tasks) {
     tasks = [];
   }
@@ -24,13 +24,17 @@ let nextId = JSON.parse(localStorage.getItem("nextId"));
 
 function saveTasksToStorage(tasks) {
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  
 }
 
-
-
 // Todo: create a function to generate a unique task id
-function generateTaskId() {}
+function generateTaskId() {
+  const timestamp = Date.now(); // Get the current timestamp
+  const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 999
+
+  return `${timestamp}-${randomNum}`;
+}
+const taskId = generateTaskId();
+console.log(taskId);
 
 // Todo: create a function to create a task card
 function createTaskCard(task) {
@@ -118,26 +122,26 @@ function handleAddTask(event) {
   const taskDescription = taskDescriptionInputEl.val();
   const taskDate = taskDateInputEl.val();
 
-const newTask = {
-  title: taskTitle,
-  description: taskDescription,
-  dueDate: taskDate,
-  status: "to-do",
-};
+  const newTask = {
+    title: taskTitle,
+    description: taskDescription,
+    dueDate: taskDate,
+    status: "to-do",
+  };
 
-const tasks = readTasksFromStorage();
-tasks.push(newTask);
+  const tasks = readTasksFromStorage();
+  tasks.push(newTask);
 
-// save the updated tasks array to localStorage
-saveTasksToStorage(tasks);
+  // save the updated tasks array to localStorage
+  saveTasksToStorage(tasks);
 
-// display task data to screen
-displayTaskData();
+  // display task data to screen
+  displayTaskData();
 
-// clear the form inputs
-taskTitleInputEl.val("");
-taskDescriptionInputEl.val("");
-taskDateInputEl.val("");
+  // clear the form inputs
+  taskTitleInputEl.val("");
+  taskDescriptionInputEl.val("");
+  taskDateInputEl.val("");
 }
 
 // Todo: create a function to handle deleting a task/////////////done
@@ -150,8 +154,12 @@ function handleDeleteTask(event) {
     if (task.id === taskId) {
       tasks.splice(tasks.indexOf(task), 1);
     }
-});
+  });
+  saveTasksToStorage(tasks);
 
+  // ? Here we use our other function to print projects back to the screen
+  displayTaskDataData();
+}
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {}
 
