@@ -11,22 +11,23 @@ const modal = document.querySelector("#theModal");
 const btn = document.querySelector(".btn");
 const span = document.querySelector(".close")[0];
 
-// Retrieve tasks and nextId from localStorage
+// Retrieve tasks and nextId from localStorage//////////////////done
 function readTasksFromStorage() {
   let taskList = JSON.parse(localStorage.getItem("tasks"));
   let nextId = JSON.parse(localStorage.getItem("nextId"));
-  if (!tasks) {
-    tasks = [];
+  if (!taskList) {
+    taskList = [];
   }
 
-  return tasks;
+  return { taskList, nextId };
 }
 
+////////////////////////done
 function saveTasksToStorage(tasks) {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-// Todo: create a function to generate a unique task id
+// Todo: create a function to generate a unique task id////////////////////done
 function generateTaskId() {
   const timestamp = Date.now(); // Get the current timestamp
   const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 999
@@ -36,14 +37,14 @@ function generateTaskId() {
 const taskId = generateTaskId();
 console.log(taskId);
 
-// Todo: create a function to create a task card
+// Todo: create a function to create a task card/////////////////done
 function createTaskCard(task) {
   const taskCard = $("<div>")
     .addClass("card task-card draggable my-3")
     .attr("data-task-id", task.id);
   const cardHeader = $("<div>").addClass("card-header h4").text(task.name);
   const cardBody = $("<div>").addClass("card-body");
-  const cardDescription = $("<p>").addClass("card-text").text(task.name);
+  const cardDescription = $("<p>").addClass("card-text").text(task.type);
   const cardDueDate = $("<p>").addClass("card-text").text(task.dueDate);
   const cardDeleteBtn = $("<button>")
     .addClass("btn btn-danger delete")
@@ -52,9 +53,9 @@ function createTaskCard(task) {
   cardDeleteBtn.on("click", handleDeleteTask);
 
   // ? Sets the card background color based on due date. Only apply the styles if the dueDate exists and the status is not done.
-  if (project.dueDate && project.status !== "done") {
+  if (task.dueDate && task.status !== "done") {
     const now = dayjs();
-    const taskDueDate = dayjs(project.dueDate, "DD/MM/YYYY");
+    const taskDueDate = dayjs(task.dueDate, "DD/MM/YYYY");
 
     // ? If the task is due today, make the card yellow. If it is overdue, make it red.
     if (now.isSame(taskDueDate, "day")) {
@@ -149,7 +150,7 @@ function handleDeleteTask(event) {
   const taskId = $(this).attr("data-task-id");
   const tasks = readTasksFromStorage();
 
-  // ? Remove project from the array. There is a method called `filter()` for this that is better suited which we will go over in a later activity. For now, we will use a `forEach()` loop to remove the project.
+  // ? Remove project from the array.
   tasks.forEach((task) => {
     if (task.id === taskId) {
       tasks.splice(tasks.indexOf(task), 1);
@@ -158,12 +159,39 @@ function handleDeleteTask(event) {
   saveTasksToStorage(tasks);
 
   // ? Here we use our other function to print projects back to the screen
-  displayTaskDataData();
+  displayTaskData();
 }
 // Todo: create a function to handle dropping a task into a new status lane
-function handleDrop(event, ui) {}
+function handleDrop(event, ui) {
+  // ? Read projects from localStorage
+  const tasks = readtasksFromStorage();
+
+  // ? Get the project id from the event
+  const taskId = ui.draggable[0].dataset.taskId;
+
+  // ? Get the id of the lane that the card was dropped into
+  const newStatus = event.target.id;
+
+  for (let task of tasks) {
+    // ? Find the project card by the `id` and update the project status.
+    if (task.id === taskId) {
+      task.status = newStatus;
+    }
+  }
+  // ? Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  displayTaskData();
+}
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
+
+// ? Add event listener to the form element, listen for a submit event, and call the `handleProjectFormSubmit` function.
+taskFormEl.on("submit", handleAddTask);
+
+// ? Because the cards are dynamically added to the screen, we have to use jQuery event delegation to listen for clicks on the added cards delete button.
+// ? We listen for a click on the parent element, and THEN check if the target of the click is the delete button. If it is, we call the `handleDeleteProject` function
+taskDisplayEl.on("click", ".btn-delete-project", handleDeleteTask);
+
 $(document).ready(function () {
   displayTaskData();
 
@@ -185,6 +213,6 @@ btn.onclick = function () {
 };
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = "none";
-};
+// span.onclick = function () {
+//   modal.style.display = "none";
+// };
