@@ -177,22 +177,22 @@ function handleDeleteTask(event) {
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-  // ? Read projects from localStorage
+  // Read tasks from localStorage
   const { taskList } = readtasksFromStorage();
 
-  // ? Get the project id from the event
+  // Get the task id from the event
   const taskId = ui.draggable[0].dataset.taskId;
 
-  // ? Get the id of the lane that the card was dropped into
+  // Get the id of the lane that the card was dropped into
   const newStatus = event.target.id;
 
   for (let task of taskList) {
-    // ? Find the project card by the `id` and update the project status.
+    //  Find the project card by the `id` and update the project status.
     if (task.id === taskId) {
       task.status = newStatus;
     }
   }
-  // ? Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
+  //  Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
   localStorage.setItem("tasks", JSON.stringify(taskList));
   renderTaskList();
 }
@@ -214,11 +214,11 @@ function handleDrop(event, ui) {
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
 
-// ? Add event listener to the form element, listen for a submit event, and call the `handleAddTask` function.
+// Add event listener to the form element, listen for a submit event, and call the `handleAddTask` function.
 taskFormEl.on("submit", handleAddTask);
 
-// ? Because the cards are dynamically added to the screen, we have to use jQuery event delegation to listen for clicks on the added cards delete button.
-// ? We listen for a click on the parent element, and THEN check if the target of the click is the delete button. If it is, we call the `handleDeleteTask` function
+// Because the cards are dynamically added to the screen, we have to use jQuery event delegation to listen for clicks on the added cards delete button.
+// We listen for a click on the parent element, and THEN check if the target of the click is the delete button. If it is, we call the `handleDeleteTask` function
 taskDisplayEl.on("click", ".btn-delete-project", handleDeleteTask);
 
 $(document).ready(function () {
@@ -235,13 +235,3 @@ $(document).ready(function () {
     drop: handleDrop,
   });
 });
-
-// When the user clicks the button, open the modal
-// btn.onclick = function () {
-//   modal.style.display = "block";
-// };
-
-// When the user clicks on <span> (x), close the modal
-// span.onclick = function () {
-//   modal.style.display = "none";
-// };
