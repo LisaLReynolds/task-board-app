@@ -24,7 +24,7 @@ function readTasksFromStorage() {
   return { taskList, nextId };
 }
 
-////////////////////////d
+////////////////////////
 function saveTasksToStorage(tasks, newNextId) {
   localStorage.setItem("nextId", newNextId);
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -45,9 +45,9 @@ function createTaskCard(task) {
   const taskCard = $("<div>")
     .addClass("card task-card draggable my-3")
     .attr("data-task-id", task.id);
-  const cardHeader = $("<div>").addClass("card-header h4").text(task.name);
+  const cardHeader = $("<div>").addClass("card-header h4").text(task.title);
   const cardBody = $("<div>").addClass("card-body");
-  const cardDescription = $("<p>").addClass("card-text").text(task.type);
+  const cardDescription = $("<p>").addClass("card-text").text(task.description);
   const cardDueDate = $("<p>").addClass("card-text").text(task.dueDate);
   const cardDeleteBtn = $("<button>")
     .addClass("btn btn-danger delete")
