@@ -90,7 +90,7 @@ function renderTaskList() {
   const doneList = $("#done-cards");
   doneList.empty();
 
-  // ? Loop through projects and create project cards for each status
+  // Loop through tasks and create project cards for each status
   for (let task of taskList) {
     if (task.status === "to-do") {
       todoList.append(createTaskCard(task));
@@ -108,12 +108,11 @@ function renderTaskList() {
     zIndex: 100,
     // function to clone the card being dragged so that the original card remains in place
     helper: function (e) {
-      // check of the target of the drag event is the card itself or a child element if it is the card itself, clone it, otherwise find the parent card and clone that
       const original = $(e.target).hasClass("ui-draggable")
         ? $(e.target)
         : $(e.target).closest(".ui-draggable");
       return original.clone().css({
-        maxWidth: original.outerWidth(),
+        width: original.outerWidth(),
       });
     },
   });
@@ -178,7 +177,7 @@ function handleDeleteTask(event) {
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
   // Read tasks from localStorage
-  const { taskList } = readtasksFromStorage();
+  const { taskList } = readTasksFromStorage();
 
   // Get the task id from the event
   const taskId = ui.draggable[0].dataset.taskId;
@@ -193,7 +192,7 @@ function handleDrop(event, ui) {
     }
   }
   //  Save the updated projects array to localStorage (overwritting the previous one) and render the new project data to the screen.
-  localStorage.setItem("tasks", JSON.stringify(taskList));
+  localStorage.setItem("taskList", JSON.stringify(taskList));
   renderTaskList();
 }
 // function handleDrop(event, ui) {
